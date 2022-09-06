@@ -1,0 +1,97 @@
+
+{% extends 'app3/base.html' %}
+
+{% block js %}
+
+<script>
+
+
+/*
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+        }
+      })
+      */
+
+    function eliminarProducto(id) {
+
+        Swal.fire ({
+            "title": " Estas seguro ?",
+            "text": "esta accion no se puede deshacer",
+            "icon": "question" ,
+            "showCancelButton": true,
+            "cancelButtonText":"NO, Cancelar",
+            "confirmButtonText": "Si, eliminar",
+            "reverseButtons":true,
+            "confirmButtonColor":"blue"
+        })
+        .then(function(result) {
+            if (result.lsConfirmed) {
+                window.location.href ="/eliminar-producto/"+id+"/"
+            }
+        })
+    }
+
+</script>
+
+{% endblock %}
+
+{% block contenido %}
+{% load humanize %}
+
+<div class="card">
+    
+<div class="class card-body">
+    <a href="{% url 'agregar_producto' %}" class="btn btn-info btn-sm">+ Agregar</a>
+<h2>Listado de Productos </h2>    
+
+<table class="table table-striped table-hover table-responsive sm">
+    <tr>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Marca</th>
+        <th>Es Nuevo ?</th>
+        <th>Opciones</th>
+    </tr>
+    {% for p in productos %}
+    <tr>
+        <td>{{ p.nombre | title  }} </td>
+        <td>${{ p.precio | intcomma  }} </td>
+        <td>{{ p.marca | title  }} </td>
+        <td>
+            {% if p.nuevo %}
+            SI
+            {% else %}
+            NO
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'modificar_producto' p.id %}" class="btn btn-info btn-sm">Modificar</a>
+            <a href="#"  onclick="eliminarProducto({{ p.id }})" class="btn btn-danger btn-sm">Borrar</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+
+</div>
+
+</div>
+
+
+{% endblock %}
+
