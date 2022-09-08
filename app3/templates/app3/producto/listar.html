@@ -66,7 +66,7 @@
         <th>Es Nuevo ?</th>
         <th>Opciones</th>
     </tr>
-    {% for p in productos %}
+    {% for p in entity %}
     <tr>
         <td>{{ p.nombre | title  }} </td>
         <td>${{ p.precio | intcomma  }} </td>
@@ -78,15 +78,24 @@
             NO
             {% endif %}
         </td>
-        <td>
-            <a href="{% url 'modificar_producto' p.id %}" class="btn btn-info btn-sm">Modificar</a>
-            <a href="#"  onclick="eliminarProducto({{ p.id }})" class="btn btn-danger btn-sm">Borrar</a>
+        <td>    
+            # si el usurio logueado tiene autorizacion , se muestra para que pueda hacer modificacion y/0 delete
+            {% if perms.app.change_producto %} # se pregunta por el valor en el sistem de autorizacion de django
+                <a href="{% url 'modificar_producto' p.id %}" class="btn btn-info btn-sm">Modificar</a>
+            {% endif %}
+            {% if perms.app.delete_producto %}
+                <a href="#"  onclick="eliminarProducto({{ p.id }})" class="btn btn-danger btn-sm">Borrar</a>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
 
 </table>
-
+    <hr>
+    
+    <div>
+        {% include 'app3/paginator.html' %}
+    </div>
 
 </div>
 
